@@ -29,7 +29,7 @@ public:
 
 protected:
 
-	void SetupCamera();
+	void SetupCamera() const;
 
 public:
 	/** Main character reference */

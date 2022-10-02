@@ -54,11 +54,9 @@ void UALSDebugComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	{
 		DrawDebugSpheres();
 
-		APlayerController* Controller = Cast<APlayerController>(OwnerCharacter->GetController());
-		if (Controller)
+		if (const APlayerController* Controller = Cast<APlayerController>(OwnerCharacter->GetController()))
 		{
-			AALSPlayerCameraManager* CamManager = Cast<AALSPlayerCameraManager>(Controller->PlayerCameraManager);
-			if (CamManager)
+			if (AALSPlayerCameraManager* CamManager = Cast<AALSPlayerCameraManager>(Controller->PlayerCameraManager))
 			{
 				CamManager->DrawDebugTargets(OwnerCharacter->GetThirdPersonPivotTarget().GetLocation());
 			}
@@ -66,7 +64,7 @@ void UALSDebugComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	}
 }
 
-void UALSDebugComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
+void UALSDebugComponent::OnComponentDestroyed(const bool bDestroyingHierarchy)
 {
 	Super::OnComponentDestroyed(bDestroyingHierarchy);
 
@@ -77,9 +75,9 @@ void UALSDebugComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
 	bShowLayerColors = false;
 }
 
-void UALSDebugComponent::FocusedDebugCharacterCycle(bool bValue)
+void UALSDebugComponent::FocusedDebugCharacterCycle(const bool bValue)
 {
-	// Refresh list, so we can also debug runtime spawned characters & remove despawned characters back
+	// Refresh list, so we can also debug runtime spawned characters & remove de-spawned characters back
 	DetectDebuggableCharactersInWorld();
 
 	if (FocusedDebugCharacterIndex == INDEX_NONE)
@@ -254,13 +252,11 @@ void UALSDebugComponent::ToggleDebugView()
 {
 	bDebugView = !bDebugView;
 
-	AALSPlayerCameraManager* CamManager = Cast<AALSPlayerCameraManager>(
-		UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0));
-	if (CamManager)
+	if (const AALSPlayerCameraManager* CamManager = Cast<AALSPlayerCameraManager>(
+		UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)))
 	{
-		UALSPlayerCameraBehavior* CameraBehavior = Cast<UALSPlayerCameraBehavior>(
-			CamManager->CameraBehavior->GetAnimInstance());
-		if (CameraBehavior)
+		if (UALSPlayerCameraBehavior* CameraBehavior = Cast<UALSPlayerCameraBehavior>(
+			CamManager->CameraBehavior->GetAnimInstance()))
 		{
 			CameraBehavior->bDebugView = bDebugView;
 		}
@@ -304,8 +300,8 @@ void UALSDebugComponent::DrawDebugLineTraceSingle(const UWorld* World,
 {
 	if (DrawDebugType != EDrawDebugTrace::None)
 	{
-		bool bPersistent = DrawDebugType == EDrawDebugTrace::Persistent;
-		float LifeTime = (DrawDebugType == EDrawDebugTrace::ForDuration) ? DrawTime : 0.f;
+		const bool bPersistent = DrawDebugType == EDrawDebugTrace::Persistent;
+		const float LifeTime = (DrawDebugType == EDrawDebugTrace::ForDuration) ? DrawTime : 0.f;
 
 		if (bHit && OutHit.bBlockingHit)
 		{
@@ -335,8 +331,8 @@ void UALSDebugComponent::DrawDebugCapsuleTraceSingle(const UWorld* World,
 {
 	if (DrawDebugType != EDrawDebugTrace::None)
 	{
-		bool bPersistent = DrawDebugType == EDrawDebugTrace::Persistent;
-		float LifeTime = (DrawDebugType == EDrawDebugTrace::ForDuration) ? DrawTime : 0.f;
+		const bool bPersistent = DrawDebugType == EDrawDebugTrace::Persistent;
+		const float LifeTime = (DrawDebugType == EDrawDebugTrace::ForDuration) ? DrawTime : 0.f;
 
 		if (bHit && OutHit.bBlockingHit)
 		{
@@ -391,8 +387,8 @@ void UALSDebugComponent::DrawDebugSphereTraceSingle(const UWorld* World,
 {
 	if (DrawDebugType != EDrawDebugTrace::None)
 	{
-		bool bPersistent = DrawDebugType == EDrawDebugTrace::Persistent;
-		float LifeTime = (DrawDebugType == EDrawDebugTrace::ForDuration) ? DrawTime : 0.f;
+		const bool bPersistent = DrawDebugType == EDrawDebugTrace::Persistent;
+		const float LifeTime = (DrawDebugType == EDrawDebugTrace::ForDuration) ? DrawTime : 0.f;
 
 		if (bHit && OutHit.bBlockingHit)
 		{

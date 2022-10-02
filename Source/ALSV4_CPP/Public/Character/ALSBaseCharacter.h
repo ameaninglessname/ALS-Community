@@ -162,7 +162,7 @@ public:
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category = "ALS|Character States")
 	void Multicast_PlayMontage(UAnimMontage* Montage, float PlayRate);
 
-	/** Ragdolling*/
+	/** Ragdoll-ing*/
 	UFUNCTION(BlueprintCallable, Category = "ALS|Character States")
 	void ReplicatedRagdollStart();
 
@@ -279,7 +279,7 @@ public:
 	virtual FVector GetFirstPersonCameraTarget();
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Camera System")
-	void GetCameraParameters(float& TPFOVOut, float& FPFOVOut, bool& bRightShoulderOut) const;
+	void GetCameraParameters(float& OutTppFov, float& OutFppFovOut, bool& bOutRightShoulder) const;
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Camera System")
 	void SetCameraBehavior(UALSPlayerCameraBehavior* CamBeh) { CameraBehavior = CamBeh; }
@@ -380,7 +380,7 @@ protected:
 
 	virtual void Landed(const FHitResult& Hit) override;
 
-	void OnLandFrictionReset();
+	void OnLandFrictionReset() const;
 
 	void SetEssentialValues(float DeltaTime);
 
@@ -402,6 +402,8 @@ protected:
 
 	void ForceUpdateCharacterState();
 
+protected:
+	
 	/** Replication */
 	UFUNCTION(Category = "ALS|Replication")
 	void OnRep_RotationMode(EALSRotationMode PrevRotMode);
@@ -415,7 +417,6 @@ protected:
 	UFUNCTION(Category = "ALS|Replication")
 	void OnRep_VisibleMesh(USkeletalMesh* NewVisibleMesh);
 
-protected:
 	/* Custom movement component*/
 	UPROPERTY()
 	TObjectPtr<UALSCharacterMovementComponent> MyCharacterMovementComponent;
@@ -610,7 +611,7 @@ protected:
 	/* Timer to manage reset of braking friction factor after on landed event */
 	FTimerHandle OnLandedFrictionResetTimer;
 
-	/* Smooth out aiming by interping control rotation*/
+	/* Smooth out aiming by interpolating control rotation*/
 	FRotator AimingRotation = FRotator::ZeroRotator;
 
 	/** We won't use curve based movement and a few other features on networked games */
