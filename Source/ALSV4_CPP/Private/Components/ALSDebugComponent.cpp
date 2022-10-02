@@ -9,6 +9,11 @@
 #include "Character/Animation/ALSPlayerCameraBehavior.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "EnhancedActionKeyMapping.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputMappingContext.h"
+#include "Subsystems/SubsystemBlueprintLibrary.h"
 
 bool UALSDebugComponent::bDebugView = false;
 bool UALSDebugComponent::bShowTraces = false;
@@ -147,6 +152,91 @@ void UALSDebugComponent::DetectDebuggableCharactersInWorld()
 		{ // seems to be that this component was not attached to and AALSBaseCharacter,
 			// therefore the index will be set to the first element in the array.
 			FocusedDebugCharacterIndex = 0;
+		}
+	}
+}
+
+
+void UALSDebugComponent::DebugToggleHudAction()
+{
+	ToggleHud();
+}
+
+void UALSDebugComponent::DebugToggleDebugViewAction()
+{
+	ToggleDebugView();
+}
+
+void UALSDebugComponent::DebugToggleTracesAction()
+{
+	ToggleTraces();
+}
+
+void UALSDebugComponent::DebugToggleShapesAction()
+{
+	ToggleDebugShapes();
+}
+
+void UALSDebugComponent::DebugToggleLayerColorsAction()
+{
+	ToggleLayerColors();
+}
+
+void UALSDebugComponent::DebugToggleCharacterInfoAction()
+{
+	ToggleCharacterInfo();
+}
+
+void UALSDebugComponent::DebugToggleSlomoAction()
+{
+	ToggleSlomo();
+}
+
+void UALSDebugComponent::DebugFocusedCharacterCycleAction(const FInputActionValue& Value)
+{
+	FocusedDebugCharacterCycle(Value.GetMagnitude() > 0);
+}
+
+void UALSDebugComponent::DebugToggleMeshAction()
+{
+	ToggleDebugMesh();
+}
+
+void UALSDebugComponent::DebugOpenOverlayMenuAction(const FInputActionValue& Value)
+{
+	OpenOverlayMenu(Value.Get<bool>());
+}
+
+void UALSDebugComponent::DebugOverlayMenuCycleAction(const FInputActionValue& Value)
+{
+	OverlayMenuCycle(Value.GetMagnitude() > 0);
+}
+
+void UALSDebugComponent::BindDebugInput(UEnhancedInputComponent* InputComponent)
+{
+	if (InputComponent && DebugInputMappingContext)
+	{
+		const TArray<FEnhancedActionKeyMapping>& Mappings = DebugInputMappingContext->GetMappings();
+		
+		// There may be more than one keymapping assigned to one action. So, first filter duplicate action entries to prevent multiple delegate bindings
+		TSet<const UInputAction*> UniqueActions;
+		for (const FEnhancedActionKeyMapping& Keymapping : Mappings)
+		{
+			UniqueActions.Add(Keymapping.Action);
+		}
+			
+		for (const UInputAction* UniqueAction : UniqueActions)
+		{
+			InputComponent->BindAction(UniqueAction, ETriggerEvent::Triggered, this, UniqueAction->GetFName());
+		}
+
+		APlayerController* PlayerController = Cast<APlayerController>(GetOwner()->GetOwner());
+
+		if (UEnhancedInputLocalPlayerSubsystem* EnhancedInputLocalPlayerSubsystem =
+			Cast<UEnhancedInputLocalPlayerSubsystem>(USubsystemBlueprintLibrary::GetLocalPlayerSubsystem(
+				PlayerController, UEnhancedInputLocalPlayerSubsystem::StaticClass())))
+		{
+			EnhancedInputLocalPlayerSubsystem->AddMappingContext(DebugInputMappingContext, 0);
 		}
 	}
 }

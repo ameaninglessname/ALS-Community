@@ -11,6 +11,7 @@
 
 class AALSBaseCharacter;
 class USkeletalMesh;
+struct FInputActionValue;
 
 UCLASS(Blueprintable, BlueprintType)
 class ALSV4_CPP_API UALSDebugComponent : public UActorComponent
@@ -130,8 +131,45 @@ public:
 	                                       FLinearColor TraceHitColor,
 	                                       float DrawTime);
 
+	void BindDebugInput(UEnhancedInputComponent* InputComponent);
+	
 protected:
 	void DetectDebuggableCharactersInWorld();
+
+	// Debug actions
+
+	UFUNCTION()
+	void DebugToggleHudAction();
+
+	UFUNCTION()
+	void DebugToggleDebugViewAction();
+
+	UFUNCTION()
+	static void DebugToggleTracesAction();
+
+	UFUNCTION()
+	static void DebugToggleShapesAction();
+
+	UFUNCTION()
+	static void DebugToggleLayerColorsAction();
+
+	UFUNCTION()
+	void DebugToggleCharacterInfoAction();
+
+	UFUNCTION()
+	void DebugToggleSlomoAction();
+
+	UFUNCTION()
+	void DebugFocusedCharacterCycleAction(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void DebugToggleMeshAction();
+
+	UFUNCTION()
+	void DebugOpenOverlayMenuAction(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void DebugOverlayMenuCycleAction(const FInputActionValue& Value);
 
 public:
 	UPROPERTY(BlueprintReadOnly, Category = "ALS|Debug")
@@ -149,11 +187,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ALS|Debug")
 	TObjectPtr<USkeletalMesh> DebugSkeletalMesh = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ALS|Debug")
+	TObjectPtr<class UInputMappingContext> DebugInputMappingContext = nullptr;
+
 	UPROPERTY(BlueprintReadOnly, Category = "ALS|Debug")
 	TArray<TObjectPtr<AALSBaseCharacter>> AvailableDebugCharacters;
 
 	UPROPERTY(BlueprintReadOnly, Category = "ALS|Debug")
 	TObjectPtr<AALSBaseCharacter> DebugFocusCharacter = nullptr;
+
 private:
 	static bool bDebugView;
 
