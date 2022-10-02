@@ -13,6 +13,8 @@ class AALSBaseCharacter;
 class USkeletalMesh;
 struct FInputActionValue;
 
+#define ENABLE_ALS_DEBUG_COMPONENT ENABLE_DRAW_DEBUG
+
 UCLASS(Blueprintable, BlueprintType)
 class ALSV4_CPP_API UALSDebugComponent : public UActorComponent
 {

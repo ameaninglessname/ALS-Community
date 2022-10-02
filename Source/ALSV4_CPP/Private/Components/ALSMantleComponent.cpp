@@ -38,7 +38,9 @@ void UALSMantleComponent::BeginPlay()
 		OwnerCharacter = Cast<AALSBaseCharacter>(GetOwner());
 		if (OwnerCharacter)
 		{
+#if ENABLE_ALS_DEBUG_COMPONENT
 			ALSDebugComponent = OwnerCharacter->FindComponentByClass<UALSDebugComponent>();
+#endif
 
 			AddTickPrerequisiteActor(OwnerCharacter); // Always tick after owner, so we'll use updated values
 
@@ -176,6 +178,7 @@ bool UALSMantleComponent::MantleCheck(const FALSMantleTraceSettings& TraceSettin
 		const bool bHit = World->SweepSingleByProfile(HitResult, TraceStart, TraceEnd, FQuat::Identity, MantleObjectDetectionProfile,
 	                                                  CapsuleCollisionShape, Params);
 
+#if ENABLE_ALS_DEBUG_COMPONENT
 		if (ALSDebugComponent && ALSDebugComponent->GetShowTraces())
 		{
 			UALSDebugComponent::DrawDebugCapsuleTraceSingle(World,
@@ -189,6 +192,7 @@ bool UALSMantleComponent::MantleCheck(const FALSMantleTraceSettings& TraceSettin
 			                                                FLinearColor::Black,
 			                                                1.0f);
 		}
+#endif
 	}
 
 	if (!HitResult.IsValidBlockingHit() || OwnerCharacter->GetCharacterMovement()->IsWalkable(HitResult))
@@ -223,6 +227,7 @@ bool UALSMantleComponent::MantleCheck(const FALSMantleTraceSettings& TraceSettin
 	                                                  WalkableSurfaceDetectionChannel, SphereCollisionShape,
 	                                                  Params);
 
+#if ENABLE_ALS_DEBUG_COMPONENT
 		if (ALSDebugComponent && ALSDebugComponent->GetShowTraces())
 		{
 			UALSDebugComponent::DrawDebugSphereTraceSingle(World,
@@ -236,6 +241,7 @@ bool UALSMantleComponent::MantleCheck(const FALSMantleTraceSettings& TraceSettin
 			                                               FLinearColor::Black,
 			                                               1.0f);
 		}
+#endif
 	}
 
 
@@ -252,11 +258,17 @@ bool UALSMantleComponent::MantleCheck(const FALSMantleTraceSettings& TraceSettin
 	// If so, set that location as the Target Transform and calculate the mantle height.
 	const FVector& CapsuleLocationFBase = UALSMathLibrary::GetCapsuleLocationFromBase(
 		DownTraceLocation, 2.0f, OwnerCharacter->GetCapsuleComponent());
-	const bool bCapsuleHasRoom = UALSMathLibrary::CapsuleHasRoomCheck(OwnerCharacter->GetCapsuleComponent(),
-	                                                                  CapsuleLocationFBase, 0.0f,
-	                                                                  0.0f, DebugType, ALSDebugComponent && ALSDebugComponent->GetShowTraces());
 
-	if (!bCapsuleHasRoom)
+#if ENABLE_ALS_DEBUG_COMPONENT
+	const bool bDrawDebugTrace = UALSDebugComponent::GetShowTraces();
+#else
+	constexpr bool bDrawDebugTrace = false;
+#endif
+
+	if (const bool bCapsuleHasRoom = UALSMathLibrary::CapsuleHasRoomCheck(OwnerCharacter->GetCapsuleComponent(),
+	                                                                      CapsuleLocationFBase, 0.0f,
+	                                                                      0.0f, DebugType, bDrawDebugTrace);
+	                                                                      !bCapsuleHasRoom)
 	{
 		// Capsule doesn't have enough room to mantle
 		return false;

@@ -22,11 +22,7 @@ bool UALSDebugComponent::bShowLayerColors = false;
 
 UALSDebugComponent::UALSDebugComponent()
 {
-#if UE_BUILD_SHIPPING
-	PrimaryComponentTick.bCanEverTick = false;
-#else
-	PrimaryComponentTick.bCanEverTick = true;
-#endif
+	PrimaryComponentTick.bCanEverTick = ENABLE_ALS_DEBUG_COMPONENT;
 }
 
 void UALSDebugComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -34,7 +30,6 @@ void UALSDebugComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-#if !UE_BUILD_SHIPPING
 	if (!OwnerCharacter)
 	{
 		return;
@@ -69,7 +64,6 @@ void UALSDebugComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 			}
 		}
 	}
-#endif
 }
 
 void UALSDebugComponent::OnComponentDestroyed(bool bDestroyingHierarchy)

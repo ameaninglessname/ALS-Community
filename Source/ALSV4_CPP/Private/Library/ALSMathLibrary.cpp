@@ -54,6 +54,7 @@ bool UALSMathLibrary::CapsuleHasRoomCheck(UCapsuleComponent* Capsule, FVector Ta
 	const bool bHit = World->SweepSingleByChannel(HitResult, TraceStart, TraceEnd, FQuat::Identity,
 	                                              ECC_Visibility, FCollisionShape::MakeSphere(Radius), Params);
 
+#if ENABLE_ALS_DEBUG_COMPONENT
 	if (DrawDebugTrace)
 	{
 		UALSDebugComponent::DrawDebugSphereTraceSingle(World,
@@ -67,6 +68,7 @@ bool UALSMathLibrary::CapsuleHasRoomCheck(UCapsuleComponent* Capsule, FVector Ta
 		                                               FLinearColor(0.932733f, 0.29136f, 1.0f, 1.0f),        // light purple
 		                                               1.0f);
 	}
+#endif
 
 	return !(HitResult.bBlockingHit || HitResult.bStartPenetrating);
 }

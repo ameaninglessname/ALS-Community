@@ -20,13 +20,13 @@ void AALSPlayerController::OnPossess(APawn* NewPawn)
 		SetupCamera();
 	}
 
-	SetupInputs();
-
-	UALSDebugComponent* DebugComp = Cast<UALSDebugComponent>(PossessedCharacter->GetComponentByClass(UALSDebugComponent::StaticClass()));
-	if (DebugComp)
+#if ENABLE_ALS_DEBUG_COMPONENT
+	if (UALSDebugComponent* DebugComp = Cast<UALSDebugComponent>(PossessedCharacter->GetComponentByClass(UALSDebugComponent::StaticClass())))
 	{
 		DebugComp->OnPlayerControllerInitialized(this);
 	}
+#endif
+	
 }
 
 void AALSPlayerController::OnRep_Pawn()
@@ -35,11 +35,12 @@ void AALSPlayerController::OnRep_Pawn()
 	PossessedCharacter = Cast<AALSBaseCharacter>(GetPawn());
 	SetupCamera();
 
-	UALSDebugComponent* DebugComp = Cast<UALSDebugComponent>(PossessedCharacter->GetComponentByClass(UALSDebugComponent::StaticClass()));
-	if (DebugComp)
+#if ENABLE_ALS_DEBUG_COMPONENT
+	if (UALSDebugComponent* DebugComp = Cast<UALSDebugComponent>(PossessedCharacter->GetComponentByClass(UALSDebugComponent::StaticClass())))
 	{
 		DebugComp->OnPlayerControllerInitialized(this);
 	}
+#endif
 }
 
 void AALSPlayerController::ServerUpdateCamera_Implementation(const FVector_NetQuantize CamLoc, const int32 CamPitchAndYaw)

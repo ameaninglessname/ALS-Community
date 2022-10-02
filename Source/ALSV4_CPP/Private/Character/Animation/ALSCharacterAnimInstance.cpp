@@ -53,6 +53,9 @@ void UALSCharacterAnimInstance::NativeInitializeAnimation()
 
 void UALSCharacterAnimInstance::NativeBeginPlay()
 {
+	// Super::NativeBeginPlay(); // empty implementation
+	
+#if ENABLE_ALS_DEBUG_COMPONENT
 	// it seems to be that the player pawn components are not really initialized
 	// when the call to NativeInitializeAnimation() happens.
 	// This is the reason why it is tried here to get the ALS debug component.
@@ -60,6 +63,7 @@ void UALSCharacterAnimInstance::NativeBeginPlay()
 	{
 		ALSDebugComponent = Owner->FindComponentByClass<UALSDebugComponent>();
 	}
+#endif
 }
 
 void UALSCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -488,6 +492,7 @@ void UALSCharacterAnimInstance::SetFootOffsets(float DeltaSeconds, FName EnableF
 	                                                  TraceEnd,
 	                                                  ECC_Visibility, Params);
 
+#if ENABLE_ALS_DEBUG_COMPONENT
 	if (ALSDebugComponent && ALSDebugComponent->GetShowTraces())
 	{
 		UALSDebugComponent::DrawDebugLineTraceSingle(
@@ -501,6 +506,7 @@ void UALSCharacterAnimInstance::SetFootOffsets(float DeltaSeconds, FName EnableF
 			FLinearColor::Green,
 			5.0f);
 	}
+#endif
 
 	FRotator TargetRotOffset = FRotator::ZeroRotator;
 	if (Character->GetCharacterMovement()->IsWalkable(HitResult))
@@ -812,6 +818,7 @@ float UALSCharacterAnimInstance::CalculateLandPrediction() const
 	const bool bHit = World->SweepSingleByChannel(HitResult, CapsuleWorldLoc, CapsuleWorldLoc + TraceLength, FQuat::Identity,
 	                                              ECC_Visibility, CapsuleCollisionShape, Params);
 
+#if ENABLE_ALS_DEBUG_COMPONENT
 	if (ALSDebugComponent && ALSDebugComponent->GetShowTraces())
 	{
 		UALSDebugComponent::DrawDebugCapsuleTraceSingle(World,
@@ -825,6 +832,7 @@ float UALSCharacterAnimInstance::CalculateLandPrediction() const
 		                                                FLinearColor::Green,
 		                                                5.0f);
 	}
+#endif
 
 	if (Character->GetCharacterMovement()->IsWalkable(HitResult))
 	{

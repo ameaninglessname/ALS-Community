@@ -60,7 +60,9 @@ void AALSPlayerCameraManager::OnPossess(AALSBaseCharacter* NewCharacter)
 	SetActorLocation(TPSLoc);
 	SmoothedPivotTarget.SetLocation(TPSLoc);
 
+#if ENABLE_ALS_DEBUG_COMPONENT
 	ALSDebugComponent = ControlledCharacter->FindComponentByClass<UALSDebugComponent>();
+#endif
 }
 
 float AALSPlayerCameraManager::GetCameraBehaviorParam(FName CurveName) const
@@ -198,6 +200,7 @@ bool AALSPlayerCameraManager::CustomCameraBehavior(float DeltaTime, FVector& Loc
 	const bool bHit = World->SweepSingleByChannel(HitResult, TraceOrigin, TargetCameraLocation, FQuat::Identity,
 	                                              TraceChannel, SphereCollisionShape, Params);
 
+#if ENABLE_ALS_DEBUG_COMPONENT
 	if (ALSDebugComponent && ALSDebugComponent->GetShowTraces())
 	{
 		UALSDebugComponent::DrawDebugSphereTraceSingle(World,
@@ -211,6 +214,7 @@ bool AALSPlayerCameraManager::CustomCameraBehavior(float DeltaTime, FVector& Loc
 		                                               FLinearColor::Green,
 		                                               5.0f);
 	}
+#endif
 
 	if (HitResult.IsValidBlockingHit())
 	{

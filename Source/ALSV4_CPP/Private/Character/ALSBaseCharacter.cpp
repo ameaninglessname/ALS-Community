@@ -116,7 +116,9 @@ void AALSBaseCharacter::BeginPlay()
 
 	MyCharacterMovementComponent->SetMovementSettings(GetTargetMovementSettings());
 
+#if ENABLE_ALS_DEBUG_COMPONENT
 	ALSDebugComponent = FindComponentByClass<UALSDebugComponent>();
+#endif
 }
 
 void AALSBaseCharacter::Tick(float DeltaTime)
@@ -714,6 +716,7 @@ void AALSBaseCharacter::SetActorLocationDuringRagdoll(float DeltaTime)
 	const bool bHit = World->LineTraceSingleByChannel(HitResult, TargetRagdollLocation, TraceVect,
 	                                                  ECC_Visibility, Params);
 
+#if ENABLE_ALS_DEBUG_COMPONENT
 	if (ALSDebugComponent && ALSDebugComponent->GetShowTraces())
 	{
 		UALSDebugComponent::DrawDebugLineTraceSingle(World,
@@ -726,6 +729,7 @@ void AALSBaseCharacter::SetActorLocationDuringRagdoll(float DeltaTime)
 		                                             FLinearColor::Green,
 		                                             1.0f);
 	}
+#endif
 
 	bRagdollOnGround = HitResult.IsValidBlockingHit();
 	FVector NewRagdollLoc = TargetRagdollLocation;
