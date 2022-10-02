@@ -69,25 +69,25 @@ public:
 	void ToggleDebugMesh();
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Debug")
-	void ToggleTraces() { bShowTraces = !bShowTraces; }
+	static void ToggleTraces() { bShowTraces = !bShowTraces; }
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Debug")
-	void ToggleDebugShapes() { bShowDebugShapes = !bShowDebugShapes; }
+	static void ToggleDebugShapes() { bShowDebugShapes = !bShowDebugShapes; }
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Debug")
-	void ToggleLayerColors() { bShowLayerColors = !bShowLayerColors; }
+	static void ToggleLayerColors() { bShowLayerColors = !bShowLayerColors; }
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Debug")
 	void ToggleCharacterInfo() { bShowCharacterInfo = !bShowCharacterInfo; }
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Debug")
-	bool GetDebugView() { return bDebugView; }
+	static bool GetDebugView() { return bDebugView; }
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Debug")
-	bool GetShowTraces() { return bShowTraces; }
+	static bool GetShowTraces() { return bShowTraces; }
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Debug")
-	bool GetShowDebugShapes() { return bShowDebugShapes; }
+	static bool GetShowDebugShapes() { return bShowDebugShapes; }
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Debug")
 	bool GetShowLayerColors() { return bShowLayerColors; }
