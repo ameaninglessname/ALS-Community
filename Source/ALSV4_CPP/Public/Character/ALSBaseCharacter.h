@@ -239,14 +239,12 @@ public:
 	bool CanSprint() const;
 
 	/** BP implementable function that called when Breakfall starts */
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Movement System")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Movement System")
 	void OnBreakfall();
-	virtual void OnBreakfall_Implementation();
 
 	/** BP implementable function that called when A Montage starts, e.g. during rolling */
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Movement System")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Movement System")
 	void Replicated_PlayMontage(UAnimMontage* Montage, float PlayRate);
-	virtual void Replicated_PlayMontage_Implementation(UAnimMontage* Montage, float PlayRate);
 
 	/** Implement on BP to get required roll animation according to character's state */
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "ALS|Movement System")
@@ -311,46 +309,40 @@ public:
 
 	/** Input */
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
-	void ForwardMovementAction(float Value);
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
+	void MoveAction(const FVector& Value);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
-	void RightMovementAction(float Value);
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
+	void CameraAction(const FVector& Value);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
-	void CameraUpAction(float Value);
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
-	void CameraRightAction(float Value);
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void JumpAction(bool bValue);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void SprintAction(bool bValue);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void AimAction(bool bValue);
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void CameraTapAction();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void CameraHeldAction();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void StanceAction();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void WalkAction();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void RagdollAction();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void VelocityDirectionAction();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "ALS|Input")
+	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void LookingDirectionAction();
 
 protected:
