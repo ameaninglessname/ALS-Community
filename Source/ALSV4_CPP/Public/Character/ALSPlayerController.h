@@ -25,6 +25,8 @@ public:
 
 	virtual void OnRep_Pawn() override;
 
+	virtual void ServerUpdateCamera_Implementation(FVector_NetQuantize CamLoc, int32 CamPitchAndYaw) override;
+
 protected:
 
 	void SetupCamera();

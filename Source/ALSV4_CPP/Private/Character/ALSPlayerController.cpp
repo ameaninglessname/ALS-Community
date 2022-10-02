@@ -42,6 +42,28 @@ void AALSPlayerController::OnRep_Pawn()
 	}
 }
 
+void AALSPlayerController::ServerUpdateCamera_Implementation(const FVector_NetQuantize CamLoc, const int32 CamPitchAndYaw)
+{
+	Super::ServerUpdateCamera_Implementation(CamLoc, CamPitchAndYaw);
+
+	if (!PossessedCharacter)
+	{
+		return;
+	}
+	
+#if ENABLE_DRAW_DEBUG
+	if ( PlayerCameraManager->bDebugClientSideCamera )
+	{
+		const float Yaw = FRotator::DecompressAxisFromShort( (CamPitchAndYaw >> 16) & 65535 );
+		const float Pitch = FRotator::DecompressAxisFromShort(CamPitchAndYaw & 65535);
+
+		DrawDebugCone(GetWorld(), PossessedCharacter->GetFirstPersonCameraTarget(), -FRotator(Pitch, Yaw, 0.f).Vector(), 50.0f,
+			30.0f, 30.0f, 8, FColor::Orange, false, -1.0,SDPG_World, 3);
+
+	}
+#endif
+}
+
 void AALSPlayerController::SetupCamera() const
 {
 	// Call "OnPossess" in Player Camera Manager when possessing a pawn
