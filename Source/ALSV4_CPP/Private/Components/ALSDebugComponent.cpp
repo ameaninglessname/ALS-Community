@@ -25,7 +25,7 @@ UALSDebugComponent::UALSDebugComponent()
 	PrimaryComponentTick.bCanEverTick = ENABLE_ALS_DEBUG_COMPONENT;
 }
 
-void UALSDebugComponent::TickComponent(float DeltaTime, ELevelTick TickType,
+void UALSDebugComponent::TickComponent(const float DeltaTime, const ELevelTick TickType,
                                        FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -291,12 +291,12 @@ void UALSDebugComponent::DrawDebugLineTraceSingle(const UWorld* World,
 	                                                const FVector& Start,
 	                                                const FVector& End,
 	                                                EDrawDebugTrace::Type
-	                                                DrawDebugType,
-	                                                bool bHit,
+	                                                const DrawDebugType,
+	                                                const bool bHit,
 	                                                const FHitResult& OutHit,
-	                                                FLinearColor TraceColor,
-	                                                FLinearColor TraceHitColor,
-	                                                float DrawTime)
+	                                                const FLinearColor TraceColor,
+	                                                const FLinearColor TraceHitColor,
+	                                                const float DrawTime)
 {
 	if (DrawDebugType != EDrawDebugTrace::None)
 	{
@@ -322,12 +322,12 @@ void UALSDebugComponent::DrawDebugCapsuleTraceSingle(const UWorld* World,
 	                                                   const FVector& Start,
 	                                                   const FVector& End,
 	                                                   const FCollisionShape& CollisionShape,
-	                                                   EDrawDebugTrace::Type DrawDebugType,
-	                                                   bool bHit,
+	                                                   const EDrawDebugTrace::Type DrawDebugType,
+	                                                   const bool bHit,
 	                                                   const FHitResult& OutHit,
-	                                                   FLinearColor TraceColor,
-	                                                   FLinearColor TraceHitColor,
-	                                                   float DrawTime)
+	                                                   const FLinearColor TraceColor,
+	                                                   const FLinearColor TraceHitColor,
+	                                                   const float DrawTime)
 {
 	if (DrawDebugType != EDrawDebugTrace::None)
 	{
@@ -378,12 +378,12 @@ void UALSDebugComponent::DrawDebugSphereTraceSingle(const UWorld* World,
 	                                                  const FVector& Start,
 	                                                  const FVector& End,
 	                                                  const FCollisionShape& CollisionShape,
-	                                                  EDrawDebugTrace::Type DrawDebugType,
-	                                                  bool bHit,
+	                                                  const EDrawDebugTrace::Type DrawDebugType,
+	                                                  const bool bHit,
 	                                                  const FHitResult& OutHit,
-	                                                  FLinearColor TraceColor,
-	                                                  FLinearColor TraceHitColor,
-	                                                  float DrawTime)
+	                                                  const FLinearColor TraceColor,
+	                                                  const FLinearColor TraceHitColor,
+	                                                  const float DrawTime)
 {
 	if (DrawDebugType != EDrawDebugTrace::None)
 	{
