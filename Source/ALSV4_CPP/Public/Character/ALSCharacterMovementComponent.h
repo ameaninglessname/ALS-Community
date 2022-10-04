@@ -49,7 +49,7 @@ class ALSV4_CPP_API UALSCharacterMovementComponent : public UCharacterMovementCo
 	virtual void OnMovementUpdated(float DeltaTime, const FVector& OldLocation, const FVector& OldVelocity) override;
 
 	// Movement Settings Override
-	virtual void PhysWalking(float deltaTime, int32 Iterations) override;
+	virtual void PhysWalking(float DeltaTime, int32 Iterations) override;
 	virtual float GetMaxAcceleration() const override;
 	virtual float GetMaxBrakingDeceleration() const override;
 

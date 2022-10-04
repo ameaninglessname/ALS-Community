@@ -12,7 +12,7 @@ UALSCharacterMovementComponent::UALSCharacterMovementComponent(const FObjectInit
 {
 }
 
-void UALSCharacterMovementComponent::OnMovementUpdated(float DeltaTime, const FVector& OldLocation,
+void UALSCharacterMovementComponent::OnMovementUpdated(const float DeltaTime, const FVector& OldLocation,
                                                        const FVector& OldVelocity)
 {
 	Super::OnMovementUpdated(DeltaTime, OldLocation, OldVelocity);
@@ -33,7 +33,7 @@ void UALSCharacterMovementComponent::OnMovementUpdated(float DeltaTime, const FV
 	}
 }
 
-void UALSCharacterMovementComponent::PhysWalking(float deltaTime, int32 Iterations)
+void UALSCharacterMovementComponent::PhysWalking(const float DeltaTime, const int32 Iterations)
 {
 	if (CurrentMovementSettings.MovementCurve)
 	{
@@ -41,7 +41,7 @@ void UALSCharacterMovementComponent::PhysWalking(float deltaTime, int32 Iteratio
 		// This allows for fine control over movement behavior at each speed.
 		GroundFriction = CurrentMovementSettings.MovementCurve->GetVectorValue(GetMappedSpeed()).Z;
 	}
-	Super::PhysWalking(deltaTime, Iterations);
+	Super::PhysWalking(DeltaTime, Iterations);
 }
 
 float UALSCharacterMovementComponent::GetMaxAcceleration() const
@@ -109,15 +109,13 @@ uint8 UALSCharacterMovementComponent::FSavedMove_My::GetCompressedFlags() const
 	return Result;
 }
 
-void UALSCharacterMovementComponent::FSavedMove_My::SetMoveFor(ACharacter* Character, float InDeltaTime,
+void UALSCharacterMovementComponent::FSavedMove_My::SetMoveFor(ACharacter* Character, const float InDeltaTime,
                                                                FVector const& NewAccel,
-                                                               class FNetworkPredictionData_Client_Character&
-                                                               ClientData)
+                                                               class FNetworkPredictionData_Client_Character& ClientData)
 {
 	Super::SetMoveFor(Character, InDeltaTime, NewAccel, ClientData);
 
-	UALSCharacterMovementComponent* CharacterMovement = Cast<UALSCharacterMovementComponent>(Character->GetCharacterMovement());
-	if (CharacterMovement)
+	if (const UALSCharacterMovementComponent* CharacterMovement = Cast<UALSCharacterMovementComponent>(Character->GetCharacterMovement()))
 	{
 		bSavedRequestMovementSettingsChange = CharacterMovement->bRequestMovementSettingsChange;
 		SavedAllowedGait = CharacterMovement->AllowedGait;
@@ -128,8 +126,7 @@ void UALSCharacterMovementComponent::FSavedMove_My::PrepMoveFor(ACharacter* Char
 {
 	Super::PrepMoveFor(Character);
 
-	UALSCharacterMovementComponent* CharacterMovement = Cast<UALSCharacterMovementComponent>(Character->GetCharacterMovement());
-	if (CharacterMovement)
+	if (UALSCharacterMovementComponent* CharacterMovement = Cast<UALSCharacterMovementComponent>(Character->GetCharacterMovement()))
 	{
 		CharacterMovement->AllowedGait = SavedAllowedGait;
 	}
@@ -175,14 +172,14 @@ float UALSCharacterMovementComponent::GetMappedSpeed() const
 	return FMath::GetMappedRangeValueClamped<float, float>({0.0f, LocWalkSpeed}, {0.0f, 1.0f}, Speed);
 }
 
-void UALSCharacterMovementComponent::SetMovementSettings(FALSMovementSettings NewMovementSettings)
+void UALSCharacterMovementComponent::SetMovementSettings(const FALSMovementSettings NewMovementSettings)
 {
 	// Set the current movement settings from the owner
 	CurrentMovementSettings = NewMovementSettings;
 	bRequestMovementSettingsChange = true;
 }
 
-void UALSCharacterMovementComponent::SetAllowedGait(EALSGait NewAllowedGait)
+void UALSCharacterMovementComponent::SetAllowedGait(const EALSGait NewAllowedGait)
 {
 	if (AllowedGait != NewAllowedGait)
 	{

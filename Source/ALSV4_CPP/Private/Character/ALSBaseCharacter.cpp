@@ -158,7 +158,7 @@ void AALSBaseCharacter::RagdollStart()
 	and if the host is a dedicated server, change character mesh optimisation option to avoid z-location issue */
 	MyCharacterMovementComponent->bIgnoreClientMovementErrorChecksAndCorrection = 1;
 
-	if (UKismetSystemLibrary::IsDedicatedServer(GetWorld()))
+	if (IsNetMode(NM_DedicatedServer))
 	{
 		DefVisBasedTickOp = GetMesh()->VisibilityBasedAnimTickOption;
 		GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
@@ -197,7 +197,7 @@ void AALSBaseCharacter::RagdollEnd()
 	/** Re-enable Replicate Movement and if the host is a dedicated server set mesh visibility based anim
 	tick option back to default*/
 
-	if (UKismetSystemLibrary::IsDedicatedServer(GetWorld()))
+	if (IsNetMode(NM_DedicatedServer))
 	{
 		GetMesh()->VisibilityBasedAnimTickOption = DefVisBasedTickOp;
 	}

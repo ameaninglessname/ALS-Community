@@ -21,7 +21,7 @@ void AALSPlayerController::OnPossess(APawn* NewPawn)
 	}
 
 #if ENABLE_ALS_DEBUG_COMPONENT
-	if (UALSDebugComponent* DebugComp = Cast<UALSDebugComponent>(PossessedCharacter->GetComponentByClass(UALSDebugComponent::StaticClass())))
+	if (UALSDebugComponent* DebugComp = PossessedCharacter->FindComponentByClass<UALSDebugComponent>())
 	{
 		DebugComp->OnPlayerControllerInitialized(this);
 	}
