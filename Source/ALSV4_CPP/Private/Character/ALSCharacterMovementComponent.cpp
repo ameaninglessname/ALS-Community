@@ -66,7 +66,19 @@ float UALSCharacterMovementComponent::GetMaxBrakingDeceleration() const
 	return CurrentMovementSettings.MovementCurve->GetVectorValue(GetMappedSpeed()).Y;
 }
 
-void UALSCharacterMovementComponent::UpdateFromCompressedFlags(uint8 Flags) // Client only
+bool bSkipSmoothCorrection = true;
+FAutoConsoleVariableRef CVarRef_bSkipSmoothCorrection(TEXT("Als.Debug.bSkipSmoothCorrection"), bSkipSmoothCorrection, TEXT(""));
+
+void UALSCharacterMovementComponent::SmoothCorrection(const FVector& OldLocation, const FQuat& OldRotation,
+	const FVector& NewLocation, const FQuat& NewRotation)
+{
+	if (!bSkipSmoothCorrection)
+	{
+		Super::SmoothCorrection(OldLocation, OldRotation, NewLocation, NewRotation);
+	}
+}
+
+void UALSCharacterMovementComponent::UpdateFromCompressedFlags(const uint8 Flags) // Client only
 {
 	Super::UpdateFromCompressedFlags(Flags);
 
