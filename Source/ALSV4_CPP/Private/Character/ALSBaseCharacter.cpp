@@ -1057,6 +1057,12 @@ void AALSBaseCharacter::UpdateGroundedRotation(const float DeltaTime)
 		}
 		else
 		{
+			if (IsNetMode(NM_DedicatedServer))
+			{
+				// DedicatedServer rotation is driven by client RPC
+				return;
+			}
+				
 			if (GetLocalRole() == ROLE_SimulatedProxy)
 			{
 				// const FScopedPreventAttachedComponentMove PreventMeshMove(GetMesh());
@@ -1079,15 +1085,13 @@ void AALSBaseCharacter::UpdateGroundedRotation(const float DeltaTime)
 			if (const float RotAmountCurve = GetAnimCurveValue(NAME_RotationAmount);
 				FMath::Abs(RotAmountCurve) > 0.001f)
 			{
+				TargetRotation.Yaw = UKismetMathLibrary::NormalizeAxis(
+					TargetRotation.Yaw + (RotAmountCurve * (DeltaTime / (1.0f / 30.0f))));
+				SetActorRotation(TargetRotation);
+
 				if (GetLocalRole() == ROLE_AutonomousProxy)
 				{
-					TargetRotation.Yaw = UKismetMathLibrary::NormalizeAxis(
-						TargetRotation.Yaw + (RotAmountCurve * (DeltaTime / (1.0f / 30.0f))));
-					SetActorRotation(TargetRotation);
-				}
-				else
-				{
-					AddActorWorldRotation({0, RotAmountCurve * (DeltaTime / (1.0f / 30.0f)), 0});
+					Server_SetActorRotation(TargetRotation);
 				}
 				TargetRotation = GetActorRotation();
 			}
@@ -1103,6 +1107,12 @@ void AALSBaseCharacter::UpdateGroundedRotation(const float DeltaTime)
 	}
 
 	// Other actions are ignored...
+}
+
+void AALSBaseCharacter::Server_SetActorRotation_Implementation(const FRotator Rotator)
+{
+	TargetRotation = Rotator;
+	SetActorRotation(Rotator);
 }
 
 void AALSBaseCharacter::UpdateInAirRotation(const float DeltaTime)

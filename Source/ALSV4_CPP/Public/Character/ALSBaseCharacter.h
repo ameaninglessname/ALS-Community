@@ -388,6 +388,9 @@ protected:
 
 	void UpdateGroundedRotation(float DeltaTime);
 
+	UFUNCTION(Server, Reliable)
+	void Server_SetActorRotation(const FRotator Rotator);
+	
 	void UpdateInAirRotation(float DeltaTime);
 
 	/** Utils */
