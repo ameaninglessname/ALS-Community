@@ -1057,6 +1057,13 @@ void AALSBaseCharacter::UpdateGroundedRotation(const float DeltaTime)
 		}
 		else
 		{
+			if (GetLocalRole() == ROLE_SimulatedProxy)
+			{
+				// const FScopedPreventAttachedComponentMove PreventMeshMove(GetMesh());
+				SmoothCharacterRotation(GetReplicatedMovement().Rotation, 10.f, 30.f, DeltaTime);
+				return;
+			}
+			
 			// Not Moving
 
 			if ((ViewMode == EALSViewMode::ThirdPerson && RotationMode == EALSRotationMode::Aiming) ||
