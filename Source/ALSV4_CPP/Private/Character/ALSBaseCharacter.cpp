@@ -1030,7 +1030,7 @@ void AALSBaseCharacter::UpdateGroundedRotation(const float DeltaTime)
 			if (RotationMode == EALSRotationMode::VelocityDirection)
 			{
 				// Velocity Direction Rotation
-				SmoothCharacterRotation({0.0f, LastVelocityRotation.Yaw, 0.0f}, 800.0f, GroundedRotationRate,
+				SmoothCharacterRotation({0.0f, LastVelocityRotation.Yaw, 0.0f}, 12.0f, GroundedRotationRate,
 				                        DeltaTime);
 			}
 			else if (RotationMode == EALSRotationMode::LookingDirection)
@@ -1047,12 +1047,12 @@ void AALSBaseCharacter::UpdateGroundedRotation(const float DeltaTime)
 					const float YawOffsetCurveVal = GetAnimCurveValue(NAME_YawOffset);
 					YawValue = AimingRotation.Yaw + YawOffsetCurveVal;
 				}
-				SmoothCharacterRotation({0.0f, YawValue, 0.0f}, 500.0f, GroundedRotationRate, DeltaTime);
+				SmoothCharacterRotation({0.0f, YawValue, 0.0f}, 7.5f, GroundedRotationRate, DeltaTime);
 			}
 			else if (RotationMode == EALSRotationMode::Aiming)
 			{
 				const float ControlYaw = AimingRotation.Yaw;
-				SmoothCharacterRotation({0.0f, ControlYaw, 0.0f}, 1000.0f, 20.0f, DeltaTime);
+				SmoothCharacterRotation({0.0f, ControlYaw, 0.0f}, 15.0f, 20.0f, DeltaTime);
 			}
 		}
 		else
@@ -1171,10 +1171,9 @@ void AALSBaseCharacter::SmoothCharacterRotation(const FRotator Target, const flo
 	const float ActorInterpSpeed, const float DeltaTime)
 {
 	// Interpolate the Target Rotation for extra smooth rotation behavior
-	TargetRotation =
-		FMath::RInterpConstantTo(TargetRotation, Target, DeltaTime, TargetInterpSpeed);
-	SetActorRotation(
-		FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, ActorInterpSpeed));
+	TargetRotation = FMath::RInterpTo(TargetRotation, Target, DeltaTime, TargetInterpSpeed);
+	
+	SetActorRotation(FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime, ActorInterpSpeed));
 }
 
 float AALSBaseCharacter::CalculateGroundedRotationRate() const
