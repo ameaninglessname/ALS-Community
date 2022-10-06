@@ -1240,8 +1240,7 @@ void AALSBaseCharacter::MoveAction(const FVector& Value)
 void AALSBaseCharacter::CameraAction(const FVector& Value)
 {
 	AddControllerPitchInput(LookUpDownRate * Value.Y);
-	AddControllerYawInput(LookLeftRightRate * Value.Z);
-	AddControllerRollInput(Value.X);
+	AddControllerYawInput(LookLeftRightRate * Value.X);
 }
 
 void AALSBaseCharacter::JumpAction(const bool bValue)
