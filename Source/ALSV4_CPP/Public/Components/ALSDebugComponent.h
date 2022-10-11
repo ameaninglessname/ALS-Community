@@ -133,7 +133,7 @@ public:
 	                                       FLinearColor TraceHitColor,
 	                                       float DrawTime);
 
-	void BindDebugInput(UEnhancedInputComponent* InputComponent);
+	void BindDebugInput(UInputComponent* InputComponent);
 	
 protected:
 	void DetectDebuggableCharactersInWorld();

@@ -204,9 +204,10 @@ void UALSDebugComponent::DebugOverlayMenuCycleAction(const FInputActionValue& Va
 	OverlayMenuCycle(Value.GetMagnitude() > 0);
 }
 
-void UALSDebugComponent::BindDebugInput(UEnhancedInputComponent* InputComponent)
+void UALSDebugComponent::BindDebugInput(UInputComponent* InputComponent)
 {
-	if (InputComponent && DebugInputMappingContext)
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
+		EnhancedInputComponent && DebugInputMappingContext)
 	{
 		const TArray<FEnhancedActionKeyMapping>& Mappings = DebugInputMappingContext->GetMappings();
 		
@@ -219,7 +220,7 @@ void UALSDebugComponent::BindDebugInput(UEnhancedInputComponent* InputComponent)
 			
 		for (const UInputAction* UniqueAction : UniqueActions)
 		{
-			InputComponent->BindAction(UniqueAction, ETriggerEvent::Triggered, this, UniqueAction->GetFName());
+			EnhancedInputComponent->BindAction(UniqueAction, ETriggerEvent::Triggered, this, UniqueAction->GetFName());
 		}
 
 		APlayerController* PlayerController = Cast<APlayerController>(GetOwner()->GetOwner());

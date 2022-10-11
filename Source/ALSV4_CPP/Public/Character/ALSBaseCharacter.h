@@ -11,9 +11,12 @@
 #include "Engine/DataTable.h"
 #include "GameFramework/Character.h"
 #include "ALSCharacterMovementComponent.h"
+#include "InputHandlingOwnerInterface.h"
+#include "Macro/GenerateMembersMacro.h"
 
 #include "ALSBaseCharacter.generated.h"
 
+class UInputHandlingComponent;
 // forward declarations
 class UALSDebugComponent;
 class UAnimMontage;
@@ -28,7 +31,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRagdollStateChangedSignature, bool,
  * Base character class
  */
 UCLASS(BlueprintType)
-class ALSV4_CPP_API AALSBaseCharacter : public ACharacter
+class ALSV4_CPP_API AALSBaseCharacter : public ACharacter, public IInputHandlingOwnerInterface
 {
 	GENERATED_BODY()
 
@@ -41,6 +44,8 @@ public:
 
 	virtual void PostInitializeComponents() override;
 
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(BlueprintCallable, Category = "ALS|Movement")
@@ -345,6 +350,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ALS|Input")
 	void LookingDirectionAction();
 
+	virtual void ListenSetupPlayerInputEvent(FOnSetupPlayerInputComponent OnSetupPlayerInputComponent) override;
+	
 protected:
 	/** Ragdoll System */
 
@@ -623,4 +630,12 @@ protected:
 private:
 	UPROPERTY()
 	TObjectPtr<UALSDebugComponent> ALSDebugComponent = nullptr;
+	
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputHandlingComponent* InputHandling;
+
+	TArray<FOnSetupPlayerInputComponent> OnSetupPlayerInputComponentArray;
+
+	using Type = AALSBaseCharacter;
+	DEFINE_GETTERS_RETURN_REFERENCE(OnSetupPlayerInputComponentArray, TArray<FOnSetupPlayerInputComponent>, &OnSetupPlayerInputComponentArray)
 };

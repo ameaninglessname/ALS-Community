@@ -45,6 +45,24 @@ void AALSBaseCharacter::PostInitializeComponents()
 	MyCharacterMovementComponent = Cast<UALSCharacterMovementComponent>(Super::GetMovementComponent());
 }
 
+void AALSBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	// if input already handled elsewhere
+	if (GetOnSetupPlayerInputComponentArray().Num() > 0)
+	{
+		TArray<FOnSetupPlayerInputComponent> CopyArray = GetOnSetupPlayerInputComponentArray();
+
+		for (const FOnSetupPlayerInputComponent& Delegate : CopyArray)
+		{
+			Delegate.Execute(PlayerInputComponent);
+		}
+		return;
+	}
+
+	// Call super and preserve backward compatibility
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
 void AALSBaseCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -1421,6 +1439,11 @@ void AALSBaseCharacter::LookingDirectionAction()
 {
 	SetDesiredRotationMode(EALSRotationMode::LookingDirection);
 	SetRotationMode(EALSRotationMode::LookingDirection);
+}
+
+void AALSBaseCharacter::ListenSetupPlayerInputEvent(FOnSetupPlayerInputComponent OnSetupPlayerInputComponent)
+{
+	GetOnSetupPlayerInputComponentArray().Add(OnSetupPlayerInputComponent);
 }
 
 void AALSBaseCharacter::ReplicatedRagdollStart()
