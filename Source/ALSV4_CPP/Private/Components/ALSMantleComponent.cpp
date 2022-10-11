@@ -14,8 +14,6 @@
 #include "Library/ALSMathLibrary.h"
 
 
-const FName NAME_MantleEnd(TEXT("MantleEnd"));
-const FName NAME_MantleUpdate(TEXT("MantleUpdate"));
 const FName NAME_MantleTimeline(TEXT("MantleTimeline"));
 
 FName UALSMantleComponent::NAME_IgnoreOnlyPawn(TEXT("IgnoreOnlyPawn"));
@@ -35,25 +33,20 @@ void UALSMantleComponent::BeginPlay()
 
 	if (GetOwner())
 	{
-		OwnerCharacter = Cast<AALSBaseCharacter>(GetOwner());
-		if (OwnerCharacter)
+		if (OwnerCharacter = Cast<AALSBaseCharacter>(GetOwner());
+			OwnerCharacter)
 		{
-#if ENABLE_ALS_DEBUG_COMPONENT
+	#if ENABLE_ALS_DEBUG_COMPONENT
 			ALSDebugComponent = OwnerCharacter->FindComponentByClass<UALSDebugComponent>();
-#endif
+	#endif
 
 			AddTickPrerequisiteActor(OwnerCharacter); // Always tick after owner, so we'll use updated values
 
 			// Bindings
-			FOnTimelineFloat TimelineUpdated;
-			FOnTimelineEvent TimelineFinished;
-			TimelineUpdated.BindUFunction(this, NAME_MantleUpdate);
-			TimelineFinished.BindUFunction(this, NAME_MantleEnd);
-			MantleTimeline->SetTimelineFinishedFunc(TimelineFinished);
+			MantleTimeline->SetTimelineFinishedFunc(FOnTimelineEventStatic::CreateUObject(this, &UALSMantleComponent::MantleEnd));
 			MantleTimeline->SetLooping(false);
 			MantleTimeline->SetTimelineLengthMode(TL_TimelineLength);
-			MantleTimeline->AddInterpFloat(MantleTimelineCurve, TimelineUpdated);
-
+			MantleTimeline->AddInterpFloat(MantleTimelineCurve, FOnTimelineFloatStatic::CreateUObject(this, &ThisClass::MantleUpdate));
 			OwnerCharacter->JumpPressedDelegate.AddUniqueDynamic(this, &UALSMantleComponent::OnOwnerJumpInput);
 			OwnerCharacter->RagdollStateChangedDelegate.AddUniqueDynamic(
 				this, &UALSMantleComponent::OnOwnerRagdollStateChanged);
