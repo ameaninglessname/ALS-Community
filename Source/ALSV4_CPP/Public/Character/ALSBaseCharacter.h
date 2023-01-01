@@ -636,6 +636,5 @@ private:
 
 	TArray<FOnSetupPlayerInputComponent> OnSetupPlayerInputComponentArray;
 
-	using Type = AALSBaseCharacter;
 	DEFINE_GETTERS_RETURN_REFERENCE(OnSetupPlayerInputComponentArray, TArray<FOnSetupPlayerInputComponent>, &OnSetupPlayerInputComponentArray)
 };
